@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- Hi Foxy -->
+	<title>TaskBook</title>
+	<link rel="stylesheet" type="text/css" href="static/style/style.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="static/js/TaskBook.js"></script>
+	<script src="static/js/atom_tool.js"></script>
+	<script src="static/js/a_task.js"></script>
+</head>
+<body> 
+	<div class="cont_wrapper">  
+		<div class="cont_box">
+			<div class="cont_choice">
+				<div target_="login_" class="cont_choice_sign_in selected">Sign In</div>
+				<div target_="sign_up_" class="cont_choice_sign_up">Sign Up</div>
+			</div>
+			<div class="cont_box_logo">
+				<img src="static/resources/task_book.png">
+			</div>
+			<ul class="error_list_ login_err" style="display: block; font-size: 10pt; width: 100%; text-align: center; color: white;">		
+			</ul>
+			<div class="login_ cont_box_inputs">
+				<ul class="login cont_box_list">
+					<li>
+						<input placeholder="Email" type="text" name="email">
+					</li>
+					<li>
+						<input placeholder="Password" type="password" name="password">
+					</li>
+				</ul>
+				<div class="login_box_button_div">
+					<button data-fetch="login" data-err="login_err"class="login_box_button">Continue</button>
+				</div>
+			</div>
+			<div style="display: none" class="sign_up_ cont_box_inputs">
+				<ul class="sign_up cont_box_list">
+					<li>
+						<input placeholder="First Name" type="text" name="lastName">
+					</li>
+					<li>
+						<input placeholder="Last Name" type="text" name="firstName">
+					</li>
+					<li>
+						<input placeholder="Email" type="text" name="email">
+					</li>
+					<li>
+						<input aria-describedby="atom-tooltip" data-atom="Between 12-30 characters Long" atom-action="down" placeholder="Password" type="password" name="password">
+					</li>
+					<li>
+						<input placeholder="Verify Password" type="password" name="vpassword">
+					</li>
+				</ul>
+				<div class="login_box_button_div">
+					<button data-fetch="sign_up" data-err="login_err" class="sign-up login_box_button">Sign Up</button>
+				</div>
+			</div>
+			<div style="overflow: hidden; position: absolute; margin: 0 auto; width: inherit; height: 2px; bottom: 0;">
+				<div class="j_l" style="transform: translateX(-200px); background-color: #6ed3cf; width: 200px; height: 100%"></div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+				(function(){
+					document.querySelector(".cont_choice")
+						.addEventListener("click", function(event) {
+							var elem = event.target;
+							Array.from(document.querySelector(".cont_choice").children).forEach(child => {
+								child.classList.remove("selected");
+								document.querySelector("." + child.getAttribute("target_")).style.display = "none";
+							})
+							elem.classList.add("selected");
+							document.querySelector("." + elem.getAttribute("target_")).style.display = "block";
+							document.querySelector(".error_list_").innerHTML = "";
+						});
+				})();
+			</script>
+</body>
+</html>

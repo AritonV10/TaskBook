@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>TaskBook</title>
+	<link rel="stylesheet" type="text/css" href="/static/style/style.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="/static/js/TaskBook.js"></script>
+	<script src="/static/js/u_task.js"></script>
+	<script src="/static/js/atom_tool.js"></script>
+</head>
+<body>
+	<div class="communities_wrapper">
+		<div class="community_box">
+			<div class="community_header">
+				<div class="community_1">Groups</div>
+				<div class="community_2"> 
+					<button class="community_j">Join</button>
+					<button class="community_c">Create</button>
+				</div>
+			</div>
+			<div class="community_list">
+				<ul>
+					<li th:each="group : ${groups}">
+						<span th:text="${group.name}"></span><button th:attr="data-redirect=${group.name}" style="float: right; height: 20px; width: 70px; border-bottom: 2px solid #6ed3cf;" class="etn-btn login_box_button">Enter</button>
+					</li>
+				</ul>
+				<div th:if="${#lists.isEmpty(groups)} == true" style="display: none; color: #757575; font-style: italic; padding: 10px; text-align: center;" class="no_groups">
+					No groups found...
+				</div>
+			</div>
+		</div>
+			<div class="community_create_box leftFadeOut">
+				<div class="community_create_header">
+					<div style="width: 96%" class="community_create_header_text">
+						Create Group
+					</div>
+					<div style="display: flex; justify-content: right; color: #e0e0e0" class="community_create_header_back">
+						<i style="cursor: pointer;" class="fas fa-times"></i>
+					</div>
+				</div>
+				<div class="community_create_inputs">
+					<ul class="error_list_ create_err" style="display: block; font-size: 10pt; width: 100%; text-align: center; color: white;">		
+					</ul>
+					<ul class="community_create_list">
+						<li>
+							<input aria-describedby="atom-tooltip" data-atom="Between 5-20 characters" atom-action="down" placeholder="Group name" type="text" name="name">
+						</li>
+						<li>
+							<input placeholder="Short description (optional)" type="text" name="description">
+						</li>
+					</ul>
+				<div class="create_community_button login_box_button_div">
+					<button data-fetch="community_create_list" data-err="create_err" class="create_community_button_p login_box_button">Get Started</button>
+				</div>
+				<div style="overflow: hidden; position: absolute; margin: 0 auto; width: 100%; height: 2px; bottom: 0;">
+				<div class="j_l" style="transform: translateX(-400px); width: inherit; background-color: #6ed3cf; height: 100%"></div>
+			</div>
+			</div>
+			</div>
+			<div class="community_join_box leftFadeOut">
+				<div class="community_join_header">
+					<div style="width: 96%" class="community_join_header_text">
+						Join Group
+					</div>
+					<div style="display: flex; justify-content: right; color: #e0e0e0" class="community_join_header_back">
+						<i style="cursor: pointer;" class="fasj fas fa-times"></i>
+					</div>
+				</div>
+				<div class="community_join_inputs">
+					<ul class="error_list_ join_err" style="display: block; font-size: 10pt; width: 100%; text-align: center; color: white;">		
+					</ul>
+					<ul class="community_join_list">
+						<li>
+							<input atom-action="down" placeholder="Invitation Code" type="text" name="code">
+						</li>
+					</ul>
+					<div class="join_community_button login_box_button_div">
+						<button data-fetch="community_join_list" data-err="join_err" class="join_community_button_p login_box_button">Get Started</button>
+					</div>
+				</div>
+				<div style="overflow: hidden; position: absolute; margin: 0 auto; width: 100%; height: 2px; bottom: 0;">
+					<div class="j_l" style="transform: translateX(-400px); width: inherit; background-color: #6ed3cf; height: 100%"></div>
+				</div>
+			</div>
+	</div>
+	<script type="text/javascript">
+		let anims = {rightIn: "rightFadeIn", rightOut:"rideFadeOut", leftIn:"leftFadeIn", leftOut:"leftFadeOut"};
+		function classList(elt) {
+  			var list = elt.classList;
+  			return {
+       			add:    function(c) { list.add   (c); return this; },
+      			remove: function(c) { list.remove(c); return this; }
+  					};
+		}
+
+		function in_out(a, b, anim_a, anim_b, remove_a, remove_b) {
+			classList(b).remove(remove_a).add(anim_a);
+			classList(a).remove(remove_b).add(anim_b);
+		}
+		function addEvent(elem, type, callback) {
+			document.querySelector(elem).addEventListener(type, callback);
+		}
+		$(function() {
+			TaskBook.global.event_(".community_j", "click", () => {
+				in_out(document.querySelector(".community_box"), document.querySelector(".community_join_box"), "rightFadeIn", "leftFadeOut", "rightFadeOut", "leftFadeIn");
+			})
+
+			TaskBook.global.event_(".fasj", "click", () => {
+				in_out(document.querySelector(".community_box"), document.querySelector(".community_join_box"), "rightFadeOut", "leftFadeIn", "rightFadeIn", "leftFadeOut");
+			});
+
+			TaskBook.global.event_(".fa-times", "click", () => {
+				in_out(document.querySelector(".community_box"), document.querySelector(".community_create_box"), "rightFadeOut", "leftFadeIn", "rightFadeIn", "leftFadeOut");
+			});
+			TaskBook.global.event_(".community_c", "click", () => {
+				in_out(document.querySelector(".community_box"), document.querySelector(".community_create_box"), "rightFadeIn", "leftFadeOut", "rightFadeOut", "leftFadeIn");
+			});
+		})
+	</script>
+</body>
+</html>

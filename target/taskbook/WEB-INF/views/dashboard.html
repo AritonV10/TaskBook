@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>TaskBook</title>
+	<link rel="stylesheet" type="text/css" href="/static/style/style.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="/static/js/TaskBook.js"></script>
+	<script src="/static/js/b_task.js"></script>
+	<th:block th:if="${isAdministrator} == true">
+		<script src="/static/js/ad_task.js"></script>
+	</th:block>
+	<script src="/static/js/atom_tool.js"></script>
+	
+</head>
+<body>
+	<div class="dashboard_wrapper">
+		<div class="dashboard_tasks">
+			<div style="justify-content: space-evenly;"class="dashboard_tasks_header">
+				<div class="dashboard_tasks_header_order">
+					<div style="color: #e0e0e0; font-size: 11pt;">
+						Order 
+					</div>
+					<select class="order">
+						<option value="1"> Asc </option>
+						<option value="2"> Desc </option>
+					</select>
+				</div>
+				<div style="display: flex;" class="dashboard_tasks_header_sort">
+					<div style="color: #e0e0e0; font-size: 11pt;">
+						Sort 
+					</div>
+					<select style="height: 30px;"class="sort_">
+						<option value="1"> Priority</option>
+						<option value="2"> Difficulty</option>
+						<option value="3"> Deadline</option>
+						<option value="4"> Status</option>
+					</select>
+					
+				</div>
+			</div>
+			<div class="_group_tasks" style="display: flex; justify-content: space-around">
+						<select class="subgroups_option">
+							<option th:each="s, iter : ${subgroups}" th:value="${iter.index}" th:attr="data-sid=${s.name}" th:text="${s.name}">Option a</option>
+					</select>
+					<th:block th:if="${isAdministrator} == true">
+						<div style="background: #939598;height: 30px;">
+							<img data-modal="add_subgroup" aria-describedby="atom-tooltip" data-atom="Add Category" atom-action="down" style="height: 30px; width: 30px;" src="/static/resources/subgroup.png">
+						</div>
+						<div style="background: #939598;height: 30px;">
+							<img data-modal="add_task" aria-describedby="atom-tooltip" data-atom="Add Task" atom-action="down" style="height: 30px; width: 30px;" src="/static/resources/task.png">
+						</div>
+					</th:block>
+			</div>
+			<div style="display: none;" data-mov="_mov_" class="d_data task_body">
+								<div data-description="" style="background: #ff5252" class="task_body_header unselectable">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+								tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+								quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo</div>
+								<div class="task_info">
+									<div class="task_info_f">
+										<ul>	
+											<li><label class="unselectable">Deadline: </label><span data-deadline="" class="unselectable">difficult</span></li>
+											<li></li>
+											<li><label class="unselectable">Priority: </label><span data-priority="" class="unselectable"></span></li>
+											<li><label class="unselectable">Status: </label><span data-status="" class="unselectable"></span></li>
+											<li><label class="unselectable">Difficulty: </label><span data-difficulty="" class="unselectable"></span></li>
+											<li></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			<ul class="_tasks_list_">
+			</ul>
+		</div>
+		<div class="dashboard_taken_tasks">
+			<div style="display: none;" class="drag_n_drop_wrapper">
+				<div class="drag_n_drop">
+					<div style="color: white; font-size: 25pt; text-align: center; margin-top: 17px;"><i class="far fa-caret-square-down"></i></div>
+					<div style="color: #fff; font-size: 11pt; text-align: center; margin-top: 10px;">Drag the task here to take it</div>
+				</div>
+			</div>
+			<ul class="task_list">
+				<li th:each="task : ${tasks}">
+					<div class="task_body">
+				<div th:text="${task.description}" th:attr="data-id_=${task.getId()},data-from=${task.category}" th:style="${task.difficulty.toString()} == 'Intermediate' ? 'background: #03a9f4' : (${task.difficulty.toString()} == 'Difficult' ? 'background: #ff5252' : 'background: #4caf50')" style="background: #4caf50" class="taken_body task_body_header unselectable">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+						tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+						quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo</div>
+					</div>	
+				</li>
+			</ul>
+		</div>
+		<div style="z-index: 100;" class="dashboard_panel">
+			<div style="display: flex;" class="dashboard_members">
+				<div style="width: 30%"><img style="height: 35px; width: 35px;" src="/static/resources/members.png"></div>
+				<div style="width: 50%; text-align: left; margin-top: 5px; font-size: 11pt;">Members</div>
+			</div>
+			<div></div>
+			<div style="display: flex;" class="dashboard_stats">
+				<div style="width: 30%"><img style="height: 35px; width: 35px;" src="/static/resources/stats.png"></div>
+				<div style="width: 50%; text-align: left; margin-top: 5px; font-size: 11pt;">My Stats</div>
+			</div>
+			<div style="display: flex;" th:attr="data-code=${group.inviteCode}" class="dashboard_invite_code">
+				<div style="width: 30%"><img style="height: 35px; width: 35px;" src="/static/resources/key.png"></div>
+				<div style="width: 50%; text-align: left; margin-top: 5px; font-size: 11pt;">Invite Key</div>
+			</div>
+			<th:block th:if="${isAdministrator} == true">
+			<div style="display: flex;" th:attr="data-code=${group.inviteCode}" class="g_invite_code dashboard_invite_code">
+				<div style="width: 30%"><img style="height: 35px; width: 35px;" src="/static/resources/LOCKED.png"></div>
+				<div style="width: 50%; text-align: left; margin-top: 5px; font-size: 11pt;">New Code</div>
+			</div>
+			</th:block>
+			</div>
+			
+			<script type="text/javascript">
+				$(function() {
+					TaskBook.global.event_(".dashboard_panel", "mouseover", () => {
+						let a = "left";
+						document.querySelector(".dashboard_panel").classList.add("right");
+					})
+					TaskBook.global.event_(".dashboard_panel", "mouseout", () => {
+						let b = "right";
+						chain_(document.querySelector(".dashboard_panel")).remove("right");
+					})
+				})
+				function chain_(elem) {
+					let a = elem.classList;
+					return {
+						add: function(c) { a.add(c); return this;
+						},
+						remove: function(b) {
+							a.remove(b); return this;
+						}
+					}
+				}
+			</script>
+			<th:block th:if="${isAdministrator} == true">
+			<div style="display: none;" class="modal_b add_subgroup">
+					<div class="modal subgroup_modal">
+						<ul class="error_list_ add_category_err" style="display: block; font-size: 10pt; width: 100%; text-align: center; color: white;">		
+						</ul> 
+						<input placeholder="Category Name..."type="text" name="subgroup">
+						<button class="login_box_button add_subgroup_button" data-fetch="subgroup_modal"data-err="add_category_err">Add Subgroup</button>
+					</div>
+					<div style="overflow: hidden; position: absolute; margin: 0 auto; width: inherit; height: 2px; bottom: 0;">
+						<div class="j_l" style="transform: translateX(-200px); background-color: #6ed3cf; width: 80%; height: 100%"></div>
+				</div>
+			</div>
+			<div style="display: none;" class="modal_b add_task">
+					<div class="modal task_modal">
+						<ul class="error_list_ add_task_err" style="display: block; font-size: 10pt; width: 100%; text-align: center; color: white;">		
+						</ul>
+						<label>Category</label>
+						<select class="categories_" name="category">
+							<option>
+								Test1
+							</option>
+						</select>
+						<label>Priority</label>
+						<select name="priority">
+							<option value="LOW">
+								Low
+							</option>
+							<option value="MEDIUM">
+								Medium
+							</option>
+							<option value="HIGH">
+								High
+							</option>
+						</select>
+						<label>Difficulty</label>
+						<select name="difficulty">
+							<option value="EASY">
+								Easy
+							</option>
+							<option value="INTERMEDIATE">
+								Intermediate
+							</option>
+							<option value="DIFFICULT">
+								Difficult
+							</option>
+						</select>
+						<label>Deadline</label>
+						<input type="date" name="deadline">
+						<label>Description</label>
+						<textarea name="description"></textarea>
+						<button class="login_box_button add_task_button" data-fetch="task_modal" data-err="add_task_err">Add Task</button>
+						<div style="overflow: hidden; position: absolute; margin: 0 auto; width: inherit; height: 2px; bottom: 0;">
+						<div class="j_l" style="transform: translateX(-200px); background-color: #6ed3cf; width: 80%; height: 100%"></div>
+				</div>
+					</div>
+			</div>
+			</th:block>
+		</div>
+	</body>
+</html>
