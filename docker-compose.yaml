@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+   app:
+      build: 
+         context: .
+         dockerfile: ./docker/docker-app/Dockerfile
+      ports:
+         - "8080:8080"
+      links:
+         - "db:task_book_db"
+      depends_on:
+         - "db"
+      volumes:
+         - "./target/taskbook.war:/opt/jboss/wildfly/standalone/deployments/taskbook.war"
+   db:
+      image: mysql:5.7.22
+      command: --default-authentication-plugin=mysql_native_password
+      restart: always
+      environment:
+          - MYSQL_ROOT_PASSWORD=root
+          - MYSQL_DATABASE=task_book
+          - MYSQL_USER=taskbook
+          - MYSQL_PASSWORD=Taskbook1330!
+      ports:
+          - "3306:3306"
+   start_dependencies: 
+      image: dadarek/wait-for-dependencies
+      depends_on:
+         - "db"
